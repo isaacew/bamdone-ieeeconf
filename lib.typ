@@ -8,7 +8,7 @@
   title: [Paper Title],
 
   // An array of authors. For each author you can specify a `given` name,
-  // `surname`, `email` prefix, and `affiliation` number. 
+  // `surname`, `email` prefix, and `affiliation` number.
   authors: (
     (
       given: "Albert",
@@ -36,7 +36,7 @@
     )
   ),
   disclaimer: [This work was not supported by any organization.],
-  
+
   // The paper's abstract. Can be omitted if you don't have one.
   abstract: none,
 
@@ -50,13 +50,13 @@
   bibliography: none,
 
   draft: false,
-  
+
   // The paper's content.
   body
 ) = {
   // Set document metadata.
   set document(title: title, author: authors.map(author => author.surname))
- 
+
   // Set the body font.
   set text(font: "TeX Gyre Termes", size: 10pt)
 
@@ -70,7 +70,10 @@
   show figure.caption.where(kind: table): smallcaps
   show figure.where(kind: table): set figure(numbering: "I")
 
-  show figure.where(kind: image): set figure(supplement: [Fig.#h(0.2em)], numbering: "1")
+  show figure.where(kind: image): set figure(
+    supplement: [Fig.#h(0.2em)],
+    numbering: "1",
+  )
   show figure.caption: cap => {
     // set align(left) //[cap]
     // cap
@@ -79,8 +82,8 @@
   set figure.caption(separator: [. #h(1em)])
   show figure.caption: set text(size: 8pt)
   show figure.caption: set par(justify: true, first-line-indent: 0em)
-  
-  
+
+
 
   // Code blocks
   show raw: set text(font: "TeX Gyre Cursor", size: 1em / 0.8)
@@ -116,10 +119,13 @@
   show ref: it => {
     if it.element != none and it.element.func() == math.equation {
       // Override equation references.
-      link(it.element.location(), numbering(
-        it.element.numbering,
-        ..counter(math.equation).at(it.element.location())
-      ))
+      link(
+        it.element.location(),
+        numbering(
+          it.element.numbering,
+          ..counter(math.equation).at(it.element.location()),
+        ),
+      )
     } else {
       // Other references as usual.
       it
@@ -145,9 +151,19 @@
     if it.level == 1 {
       // First-level headings are centered smallcaps.
       // We don't want to number the acknowledgment section.
-      let is-ack = it.body in ([Acknowledgment], [Acknowledgement], [Acknowledgments], [Acknowledgements],[Appendix])
+      let is-ack = it.body in (
+        [Acknowledgment],
+        [Acknowledgement],
+        [Acknowledgments],
+        [Acknowledgements],
+        [Appendix],
+      )
       set align(center)
-      set text(if is-ack { 10pt } else { 11pt })
+      set text(if is-ack {
+        10pt
+      } else {
+        11pt
+      })
       show: block.with(above: 15pt, below: 13.75pt, sticky: true)
       // show: smallcaps
       show: upper
@@ -177,8 +193,8 @@
   }
 
 
-  
-  
+
+
   // Style bibliography made up by Isaac
   show std-bibliography: set block(spacing: 0.65em)
   show std-bibliography: set par(leading: 0.5em)
@@ -192,16 +208,18 @@
   v(8.35mm, weak: true)
 
   // Display the authors list.
-  let author-name-affil =  authors.map(author => [#author.given #author.surname#super[#author.affiliation]]).join(", ", last: ", and ")
+  let author-name-affil = authors
+    .map(author => [#author.given #author.surname#super[#author.affiliation]])
+    .join(", ", last: ", and ")
 
   align(center)[#text(11pt)[#author-name-affil]]
-  
+
   v(40pt, weak: true)
 
   // Start two column mode and configure paragraph properties.
   show: columns.with(2, gutter: 12pt)
   set par(justify: true, first-line-indent: 1em, spacing: 0.65em)
-  
+
   // Display abstract and index terms.
   if abstract != none [
     #set text(9pt, weight: 700)
@@ -213,25 +231,35 @@
     #v(2pt)
   ]
 
-  figure(placement: bottom, align(left)[
-    #block(width: 100%, height: auto, stroke: none)[#text(8.5pt)[
-      #h(1em) #disclaimer
-    
-      #for i in range(affiliations.len()) {
-        let affiliation = affiliations.at(i)
-        let authors-for-this-affiliation = authors.filter(author => author.affiliation - 1 == i)
-        let multi-author = authors-for-this-affiliation.len() > 1
-        let author-surname = [#authors-for-this-affiliation.map(author => author.surname).join(", ")]
-        let joiner = if multi-author [are] else [is]
-        let author-email-prefix = [#authors-for-this-affiliation.map(author => author.email).join(", ")]
+  figure(
+    placement: bottom,
+    align(left)[
+      #block(width: 100%, height: auto, stroke: none)[#text(8.5pt)[
+          #h(1em) #disclaimer
 
-        [#super[#{i + 1}]#author-surname #joiner with #affiliation.name, #affiliation.address, #text(weight: 100, font:"New Computer Modern Mono")[#if multi-author [{]#author-email-prefix#if multi-author [}]\@#affiliation.email-suffix.   #parbreak()]]
-      }
+          #for i in range(affiliations.len()) {
+            let affiliation = affiliations.at(i)
+            let authors-for-this-affiliation = authors.filter(author => (
+              author.affiliation - 1 == i
+            ))
+            let multi-author = authors-for-this-affiliation.len() > 1
+            let author-surname = [#authors-for-this-affiliation.map(author => (
+                author.surname
+              )).join(", ")]
+            let joiner = if multi-author [are] else [is]
+            let author-email-prefix = [#authors-for-this-affiliation.map(author => (
+                author.email
+              )).join(", ")]
 
-    // #footnote(par()[#v(-1.5em)0018-9251 © 2020 IEEE], numbering: it => "",)
-    ]]  
-  ])
-  
+            [#super[#{i + 1}]#author-surname #joiner with #affiliation.name, #affiliation.address, #text(weight: 100, font:"New Computer Modern Mono")[#if multi-author [{]#author-email-prefix#if multi-author [}]\@#affiliation.email-suffix.   #parbreak()]]
+          }
+
+          #counter(figure.where(kind: image)).update(0)
+          // #footnote(par()[#v(-1.5em)0018-9251 © 2020 IEEE], numbering: it => "",)
+        ]]
+    ],
+  )
+
   // Display the paper's contents.
   body
 
