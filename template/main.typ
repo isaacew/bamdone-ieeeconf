@@ -35,6 +35,7 @@ authors: (
   bibliography: bibliography("refs.bib"),
   draft: false,               // Adds the draft markers on the footer and header
   paper-size: "us-letter",
+  disclaimer: [This work was not supported by any organization.],
 )
 
 = Introduction
