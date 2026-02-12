@@ -34,6 +34,7 @@ This template exports the `ieee` function with the following named arguments:
   Specifying this will configure numeric, IEEE-style citations.
 - `draft`: can be either true or false and turns on or off markers for page 
   numbers and header/footer callouts for a draft.
+- `disclaimer`: catch-all for funding or other miscellaneous information (content).
 
 
 The function also accepts a single, positional argument for the body of the
