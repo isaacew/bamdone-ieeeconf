@@ -1,4 +1,4 @@
-#import "@preview/bamdone-ieeeconf:0.1.1": *
+#import "@preview/bamdone-ieeeconf:0.1.2": *
 
 #show: ieee.with(
   title: [Preparation of Papers for IEEE Sponsored Conferences & Symposia],
