@@ -167,8 +167,8 @@
         11pt
       })
       show: block.with(above: 15pt, below: 13.75pt, sticky: true)
-      // show: smallcaps
-      show: upper
+      show: smallcaps
+      // show: upper
       if it.numbering != none and not is-ack {
         numbering("I.", deepest)
         h(7pt, weak: true)
