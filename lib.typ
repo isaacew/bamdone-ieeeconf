@@ -211,7 +211,7 @@
 
   // Display the authors list.
   let author-name-affil = authors
-    .map(author => [#author.given #author.surname#super[#author.affiliation]])
+    .map(author => box[#author.given #author.surname#super[#author.affiliation]])
     .join(", ", last: ", and ")
 
   align(center)[#text(11pt)[#author-name-affil]]
@@ -220,7 +220,8 @@
 
   // Start two column mode and configure paragraph properties.
   show: columns.with(2, gutter: 12pt)
-  set par(justify: true, first-line-indent: 1em, spacing: 0.65em)
+  let spc = 0.53em
+  set par(justify: true, first-line-indent: 1em, spacing: spc, leading: spc)
 
   // Display abstract and index terms.
   if abstract != none [
